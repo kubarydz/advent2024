@@ -3,6 +3,8 @@ package utils
 import (
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func ReadInput(filename string) []byte {
@@ -25,6 +27,28 @@ func ChunkInput(input []byte) [][]byte {
 		}
 	}
 	return chunks
+}
+
+func ReadInts(filename string) [][]int {
+	bytes := ReadChunks(filename)
+	result := [][]int{}
+	for _, row := range bytes {
+		rowStr := strings.Split(string(row), " ")
+		rowInt := []int{}
+		for _, rstr := range rowStr {
+			i, err := strconv.Atoi(rstr)
+			if err != nil {
+				panic(err)
+			}
+			rowInt = append(rowInt, i)
+		}
+		result = append(result, rowInt)
+	}
+	return result
+}
+
+func ReadChunks(filename string) [][]byte {
+	return ChunkInput(ReadInput(filename))
 }
 
 func Abs(x int) int {
